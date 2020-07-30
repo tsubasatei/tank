@@ -20,12 +20,19 @@ public class Bullet {
 
     private BufferedImage image;
 
+    Rectangle rectangle = new Rectangle();
+
     public Bullet(int x, int y, Dir dir, Group group, TankFrame tankFrame) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
         this.tankFrame = tankFrame;
+
+        rectangle.x = x;
+        rectangle.y = y;
+        rectangle.width = WIDTH;
+        rectangle.height = HEIGHT;
     }
 
     public boolean living() {
@@ -78,16 +85,20 @@ public class Bullet {
         if (x < 0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) {
             living = false;
         }
+
+        // 更新 rectangle
+        rectangle.x = x;
+        rectangle.y = y;
+        rectangle.width = WIDTH;
+        rectangle.height = HEIGHT;
     }
 
     // 判断 子弹 和 坦克 的碰撞
     public void collideWith(Tank tank) {
         if(this.group == tank.getGroup()) return;
 
-        // todo 用一个 Rectangle 标识子弹/坦克的位置
-        Rectangle bulletR = new Rectangle(x, y, WIDTH, HEIGHT);
-        Rectangle tankR = new Rectangle(tank.getX(), tank.getY(), Tank.WIDTH, Tank.HEIGHT);
-        if (bulletR.intersects(tankR)) { // 两矩形相交
+        Rectangle tankR = tank.rectangle;
+        if (rectangle.intersects(tankR)) { // 两矩形相交
             this.die();
             tank.die();
             int bX = tank.getX() + Tank.WIDTH / 2 - Explosion.WIDTH / 2;

@@ -27,12 +27,19 @@ public class Tank {
 
     private Random random = new Random();
 
+    Rectangle rectangle = new Rectangle();
+
     public Tank(int x, int y, Dir dir, Group group, TankFrame tankFrame) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
         this.tankFrame = tankFrame;
+
+        rectangle.x = x;
+        rectangle.y = y;
+        rectangle.width = WIDTH;
+        rectangle.height = HEIGHT;
     }
 
     public void setDir(Dir dir) {
@@ -60,16 +67,16 @@ public class Tank {
         if (!living) this.tankFrame.getEnemyTanks().remove(this);
         switch (dir) {
             case LEFT:
-                image = ResourceMgr.tankL;
+                image = group == Group.GOOD ? ResourceMgr.goodTankL : ResourceMgr.badTankL;
                 break;
             case RIGHT:
-                image = ResourceMgr.tankR;
+                image = group == Group.GOOD ? ResourceMgr.goodTankR : ResourceMgr.badTankR;
                 break;
             case UP:
-                image = ResourceMgr.tankU;
+                image = group == Group.GOOD ? ResourceMgr.goodTankU : ResourceMgr.badTankU;
                 break;
             case DOWN:
-                image = ResourceMgr.tankD;
+                image = group == Group.GOOD ? ResourceMgr.goodTankD : ResourceMgr.badTankD;
                 break;
         }
         WIDTH = image.getWidth();
@@ -100,6 +107,21 @@ public class Tank {
 
         if (this.group == Group.BAD && random.nextInt(100) > 95) this.fire();
         if (this.group == Group.BAD && random.nextInt(100) > 95) randomDir();
+
+        // 边界检测
+        boundCheck();
+
+        rectangle.x = x;
+        rectangle.y = y;
+        rectangle.width = WIDTH;
+        rectangle.height = HEIGHT;
+    }
+
+    private void boundCheck() {
+        if (this.x < 2) x = 2;
+        if (this.y < 28) y = 28;
+        if (this.x > TankFrame.GAME_WIDTH - Tank.WIDTH -2) x = TankFrame.GAME_WIDTH - Tank.WIDTH - 2;
+        if (this.y > TankFrame.GAME_HEIGHT - Tank.HEIGHT -2 ) y = TankFrame.GAME_HEIGHT - Tank.HEIGHT -2;
     }
 
     // 随即方向
