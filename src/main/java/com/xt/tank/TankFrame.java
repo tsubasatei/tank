@@ -14,16 +14,21 @@ import java.util.List;
 public class TankFrame extends Frame {
 
     // 窗口大小
-    public static final int GAME_WIDTH = 800;
-    public static final int GAME_HEIGHT = 600;
+    public static final int GAME_WIDTH = 1080;
+    public static final int GAME_HEIGHT = 960;
 
     private int x = 200;
     private int y = 400;
 
-
+    // 己方坦克
     private Tank tank = new Tank(x, y, Dir.DOWN, Group.GOOD, this); // 初始 Tank
-    private List<Bullet> bullets = new ArrayList<>(); // 子弹列表
+    // 子弹列表
+    private List<Bullet> bullets = new ArrayList<>();
+    // 敌方坦克列表
     private List<Tank> enemyTanks = new ArrayList<>();
+    // 爆炸
+    private Explosion explosion = new Explosion(100, 100, this);
+
 
     public TankFrame() throws HeadlessException {
         setBackground(Color.BLACK);
@@ -80,6 +85,9 @@ public class TankFrame extends Frame {
                 bullets.get(i).collideWith(enemyTanks.get(j));
             }
         }
+
+        explosion.paint(g);
+
 
         /* // 可以用
         Iterator<Bullet> iterator = bullets.iterator();
