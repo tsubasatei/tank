@@ -1,46 +1,50 @@
 package com.xt.tank;
 
-import lombok.Data;
-
 import java.awt.*;
 
 /**
- * 子弹类
+ * 子弹
  */
-@Data
 public class Bullet {
     private int x, y;
     private Dir dir;
-    private TankFrame frame;
-    private static final int SPEED = 10;
-    private static final int WIDTH = 30;
-    private static final int HEIGHT = 30;
+    private TankFrame tankFrame;
+
     private boolean isAlive = true;
 
-    public Bullet(int x, int y, Dir dir, TankFrame frame) {
+    public static final int SPEED = 10;
+    public static final int WIDTH = 30;
+    public static final int HEIGHT = 30;
+
+    public Bullet(int x, int y, Dir dir, TankFrame tankFrame) {
         this.x = x;
         this.y = y;
         this.dir = dir;
-        this.frame = frame;
+        this.tankFrame = tankFrame;
     }
 
-    // 发射子弹
+    public boolean isAlive() {
+        return isAlive;
+    }
+
+    // 绘制子弹
     public void paint(Graphics g) {
         if (!isAlive) {
-            this.frame.bullets.remove(this);
+            this.tankFrame.getBullets().remove(this);
+            return;
         }
-        // 获取画笔的颜色, 改变颜色后，再设置回去
         Color color = g.getColor();
         g.setColor(Color.RED);
-        g.fillOval(x, y, WIDTH, HEIGHT);
+        g.fillOval(x, y, WIDTH, HEIGHT); // 画圆形
         g.setColor(color);
+
         move();
     }
 
-    // 设置子弹方向
-    public void move() {
+    // 设置子弹移动方向, 并判断是否还活着
+    private void move() {
         switch (dir) {
-            case LEFT :
+            case LEFT:
                 x -= SPEED;
                 break;
             case RIGHT:
@@ -52,11 +56,10 @@ public class Bullet {
             case DOWN:
                 y += SPEED;
                 break;
-            default:
-                break;
         }
-        if (x < 0 || y < 0 || x > TankFrame.WIDTH || y > TankFrame.HEIGHT) {
+        if (x < 0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) {
             isAlive = false;
         }
     }
+
 }
