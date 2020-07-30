@@ -1,12 +1,12 @@
 package com.xt.tank;
 
-import lombok.Data;
-
 import java.awt.*;
-import java.awt.event.*;
-import java.util.Iterator;
-import java.util.List;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 坦克窗口
@@ -18,11 +18,12 @@ public class TankFrame extends Frame {
     public static final int GAME_HEIGHT = 600;
 
     private int x = 200;
-    private int y = 200;
+    private int y = 400;
 
 
     private Tank tank = new Tank(x, y, Dir.DOWN, this); // 初始 Tank
     private List<Bullet> bullets = new ArrayList<>(); // 子弹列表
+    private List<Tank> enemyTanks = new ArrayList<>();
 
     public TankFrame() throws HeadlessException {
         setBackground(Color.BLACK);
@@ -49,6 +50,10 @@ public class TankFrame extends Frame {
         return bullets;
     }
 
+    public List<Tank> getEnemyTanks() {
+        return enemyTanks;
+    }
+
     // 绘制
     @Override
     public void paint(Graphics g) {
@@ -61,6 +66,11 @@ public class TankFrame extends Frame {
         tank.paint(g);
         for (int i = 0; i < bullets.size(); i++) {
             bullets.get(i).paint(g);
+        }
+
+        // 绘制敌军坦克
+        for (int i = 0; i < enemyTanks.size(); i++) {
+            enemyTanks.get(i).paint(g);
         }
 
         /* // 可以用
