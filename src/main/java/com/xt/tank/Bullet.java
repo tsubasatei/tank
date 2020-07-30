@@ -14,7 +14,7 @@ public class Bullet {
 
     private boolean living = true;
 
-    public static final int SPEED = 10;
+    public static final int SPEED = PropertyMgr.getInt("bulletSpeed") != null ? PropertyMgr.getInt("bulletSpeed") : 10;
     public static int WIDTH = 30;
     public static int HEIGHT = 30;
 

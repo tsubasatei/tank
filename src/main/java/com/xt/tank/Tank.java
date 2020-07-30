@@ -16,7 +16,7 @@ public class Tank {
     private Group group; // 分组
     private TankFrame tankFrame;
 
-    public static final int SPEED = 1;
+    public static final int SPEED = PropertyMgr.getInt("tankSpeed") != null ? PropertyMgr.getInt("tankSpeed") : 5;
     private BufferedImage image;
 
     public static int WIDTH = 50;
