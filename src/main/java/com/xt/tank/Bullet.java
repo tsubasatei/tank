@@ -1,6 +1,7 @@
 package com.xt.tank;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * 子弹
@@ -13,8 +14,10 @@ public class Bullet {
     private boolean isAlive = true;
 
     public static final int SPEED = 10;
-    public static final int WIDTH = 30;
-    public static final int HEIGHT = 30;
+    public static int WIDTH = 30;
+    public static int HEIGHT = 30;
+
+    private BufferedImage image;
 
     public Bullet(int x, int y, Dir dir, TankFrame tankFrame) {
         this.x = x;
@@ -33,10 +36,23 @@ public class Bullet {
             this.tankFrame.getBullets().remove(this);
             return;
         }
-        Color color = g.getColor();
-        g.setColor(Color.RED);
-        g.fillOval(x, y, WIDTH, HEIGHT); // 画圆形
-        g.setColor(color);
+        switch (dir) {
+            case LEFT:
+                image = ResourceMgr.bulletL;
+                break;
+            case RIGHT:
+                image = ResourceMgr.bulletR;
+                break;
+            case UP:
+                image = ResourceMgr.bulletU;
+                break;
+            case DOWN:
+                image = ResourceMgr.bulletD;
+                break;
+        }
+        WIDTH = image.getWidth();
+        HEIGHT = image.getHeight();
+        g.drawImage(image, x, y, null);
 
         move();
     }

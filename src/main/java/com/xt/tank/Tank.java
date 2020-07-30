@@ -3,6 +3,7 @@ package com.xt.tank;
 import lombok.AllArgsConstructor;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * 坦克
@@ -14,8 +15,10 @@ public class Tank {
     private TankFrame tankFrame;
 
     public static final int SPEED = 5;
-    public static final int WIDTH = 50;
-    public static final int HEIGHT = 50;
+    private BufferedImage image;
+
+    public static int WIDTH = 50;
+    public static int HEIGHT = 50;
 
     private boolean isMoving = true;
 
@@ -36,10 +39,23 @@ public class Tank {
 
     // 绘制tank
     public void paint(Graphics g) {
-        Color color = g.getColor();
-        g.setColor(Color.BLUE);
-        g.fillRect(x, y, WIDTH, HEIGHT); // 画矩形
-        g.setColor(color);
+        switch (dir) {
+            case LEFT:
+                image = ResourceMgr.tankL;
+                break;
+            case RIGHT:
+                image = ResourceMgr.tankR;
+                break;
+            case UP:
+                image = ResourceMgr.tankU;
+                break;
+            case DOWN:
+                image = ResourceMgr.tankD;
+                break;
+        }
+        WIDTH = image.getWidth();
+        HEIGHT = image.getHeight();
+        g.drawImage(image, x, y, null);
 
         move();
     }
@@ -66,6 +82,8 @@ public class Tank {
 
     // 发射子弹
     public void fire() {
-        tankFrame.getBullets().add(new Bullet(this.x, this.y, this.dir, this.tankFrame));
+        int bX = this.x + WIDTH/2 - Bullet.WIDTH/2;
+        int bY = this.y + HEIGHT/2 - Bullet.HEIGHT/2;
+        tankFrame.getBullets().add(new Bullet(bX, bY, this.dir, this.tankFrame));
     }
 }
