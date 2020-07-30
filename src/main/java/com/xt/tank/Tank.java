@@ -98,7 +98,13 @@ public class Tank {
                 break;
         }
 
-        if (random.nextInt() > 8) this.fire();
+        if (this.group == Group.BAD && random.nextInt(100) > 95) this.fire();
+        if (this.group == Group.BAD && random.nextInt(100) > 95) randomDir();
+    }
+
+    // 随即方向
+    private void randomDir() {
+        this.dir = Dir.values()[random.nextInt(4)];
     }
 
     // 发射子弹

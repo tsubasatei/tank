@@ -26,8 +26,8 @@ public class TankFrame extends Frame {
     private List<Bullet> bullets = new ArrayList<>();
     // 敌方坦克列表
     private List<Tank> enemyTanks = new ArrayList<>();
-    // 爆炸
-    private Explosion explosion = new Explosion(100, 100, this);
+    // 爆炸组
+    private List<Explosion> explosions = new ArrayList<>();
 
 
     public TankFrame() throws HeadlessException {
@@ -59,6 +59,10 @@ public class TankFrame extends Frame {
         return enemyTanks;
     }
 
+    public List<Explosion> getExplosions() {
+        return explosions;
+    }
+
     // 绘制
     @Override
     public void paint(Graphics g) {
@@ -66,6 +70,7 @@ public class TankFrame extends Frame {
         g.setColor(Color.WHITE);
         g.drawString("子弹的数量: " + this.bullets.size(), 20, 60);
         g.drawString("敌人的数量: " + this.enemyTanks.size(), 20, 80);
+        g.drawString("爆炸的数量: " + this.enemyTanks.size(), 20, 100);
         g.setColor(color);
 
         // 分别绘制tank 和 子弹
@@ -79,14 +84,17 @@ public class TankFrame extends Frame {
             enemyTanks.get(i).paint(g);
         }
 
+        // 绘制爆炸
+        for (int i = 0; i < explosions.size(); i++) {
+            explosions.get(i).paint(g);
+        }
+
         // 判断子弹和坦克是否相交
         for (int i = 0; i < bullets.size(); i++) {
             for (int j = 0; j < enemyTanks.size(); j++) {
                 bullets.get(i).collideWith(enemyTanks.get(j));
             }
         }
-
-        explosion.paint(g);
 
 
         /* // 可以用

@@ -10,7 +10,6 @@ public class Explosion {
     private int x, y;
     private TankFrame tankFrame;
     private BufferedImage image = ResourceMgr.explosions[0];
-    private boolean living = true;
 
     public static int WIDTH = ResourceMgr.explosions[0].getWidth();
     public static int HEIGHT = ResourceMgr.explosions[0].getHeight();
@@ -25,16 +24,11 @@ public class Explosion {
         new Thread(()->new Audio("audio/explode.wav").play()).start();
     }
 
-    public boolean living() {
-        return living;
-    }
-
     // 绘制子弹
     public void paint(Graphics g) {
         g.drawImage(ResourceMgr.explosions[step++], x, y, null);
         if (step >= ResourceMgr.explosions.length) {
-            step = 0;
-            living = false;
+            this.tankFrame.getExplosions().remove(this);
         }
     }
 }

@@ -90,6 +90,9 @@ public class Bullet {
         if (bulletR.intersects(tankR)) { // 两矩形相交
             this.die();
             tank.die();
+            int bX = tank.getX() + Tank.WIDTH / 2 - Explosion.WIDTH / 2;
+            int bY = tank.getY() + Tank.HEIGHT / 2 - Explosion.HEIGHT / 2;
+            this.tankFrame.getExplosions().add(new Explosion(bX, bY, this.tankFrame));
         }
     }
 
