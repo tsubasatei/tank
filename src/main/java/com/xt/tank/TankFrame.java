@@ -21,7 +21,7 @@ public class TankFrame extends Frame {
     private int y = 400;
 
 
-    private Tank tank = new Tank(x, y, Dir.DOWN, this); // 初始 Tank
+    private Tank tank = new Tank(x, y, Dir.DOWN, Group.GOOD, this); // 初始 Tank
     private List<Bullet> bullets = new ArrayList<>(); // 子弹列表
     private List<Tank> enemyTanks = new ArrayList<>();
 

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 /**
  * 坦克
@@ -12,21 +13,25 @@ import java.awt.image.BufferedImage;
 public class Tank {
     private int x, y; // 初始位置
     private Dir dir; // 初始方向
+    private Group group; // 分组
     private TankFrame tankFrame;
 
-    public static final int SPEED = 2;
+    public static final int SPEED = 1;
     private BufferedImage image;
 
     public static int WIDTH = 50;
     public static int HEIGHT = 50;
 
-    private boolean isMoving = false;
+    private boolean isMoving = true;
     private boolean living = true;
 
-    public Tank(int x, int y, Dir dir, TankFrame tankFrame) {
+    private Random random = new Random();
+
+    public Tank(int x, int y, Dir dir, Group group, TankFrame tankFrame) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.group = group;
         this.tankFrame = tankFrame;
     }
 
@@ -44,6 +49,10 @@ public class Tank {
 
     public int getY() {
         return y;
+    }
+
+    public Group getGroup() {
+        return group;
     }
 
     // 绘制tank
@@ -88,13 +97,15 @@ public class Tank {
                 y += SPEED;
                 break;
         }
+
+        if (random.nextInt() > 8) this.fire();
     }
 
     // 发射子弹
     public void fire() {
         int bX = this.x + WIDTH/2 - Bullet.WIDTH/2;
         int bY = this.y + HEIGHT/2 - Bullet.HEIGHT/2;
-        tankFrame.getBullets().add(new Bullet(bX, bY, this.dir, this.tankFrame));
+        tankFrame.getBullets().add(new Bullet(bX, bY, this.dir, this.group, this.tankFrame));
     }
 
     public void die() {

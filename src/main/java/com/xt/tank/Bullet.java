@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 public class Bullet {
     private int x, y;
     private Dir dir;
+    private Group group;
     private TankFrame tankFrame;
 
     private boolean living = true;
@@ -19,10 +20,11 @@ public class Bullet {
 
     private BufferedImage image;
 
-    public Bullet(int x, int y, Dir dir, TankFrame tankFrame) {
+    public Bullet(int x, int y, Dir dir, Group group, TankFrame tankFrame) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.group = group;
         this.tankFrame = tankFrame;
     }
 
@@ -80,6 +82,9 @@ public class Bullet {
 
     // 判断 子弹 和 坦克 的碰撞
     public void collideWith(Tank tank) {
+        if(this.group == tank.getGroup()) return;
+
+        // todo 用一个 Rectangle 标识子弹/坦克的位置
         Rectangle bulletR = new Rectangle(x, y, WIDTH, HEIGHT);
         Rectangle tankR = new Rectangle(tank.getX(), tank.getY(), Tank.WIDTH, Tank.HEIGHT);
         if (bulletR.intersects(tankR)) { // 两矩形相交
