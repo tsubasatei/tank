@@ -14,13 +14,14 @@ public class Tank {
     private Dir dir; // 初始方向
     private TankFrame tankFrame;
 
-    public static final int SPEED = 5;
+    public static final int SPEED = 2;
     private BufferedImage image;
 
     public static int WIDTH = 50;
     public static int HEIGHT = 50;
 
-    private boolean isMoving = true;
+    private boolean isMoving = false;
+    private boolean living = true;
 
     public Tank(int x, int y, Dir dir, TankFrame tankFrame) {
         this.x = x;
@@ -37,8 +38,17 @@ public class Tank {
         isMoving = moving;
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
     // 绘制tank
     public void paint(Graphics g) {
+        if (!living) this.tankFrame.getEnemyTanks().remove(this);
         switch (dir) {
             case LEFT:
                 image = ResourceMgr.tankL;
@@ -85,5 +95,9 @@ public class Tank {
         int bX = this.x + WIDTH/2 - Bullet.WIDTH/2;
         int bY = this.y + HEIGHT/2 - Bullet.HEIGHT/2;
         tankFrame.getBullets().add(new Bullet(bX, bY, this.dir, this.tankFrame));
+    }
+
+    public void die() {
+        living = false;
     }
 }

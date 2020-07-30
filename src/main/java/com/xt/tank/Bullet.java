@@ -11,7 +11,7 @@ public class Bullet {
     private Dir dir;
     private TankFrame tankFrame;
 
-    private boolean isAlive = true;
+    private boolean living = true;
 
     public static final int SPEED = 10;
     public static int WIDTH = 30;
@@ -26,13 +26,13 @@ public class Bullet {
         this.tankFrame = tankFrame;
     }
 
-    public boolean isAlive() {
-        return isAlive;
+    public boolean living() {
+        return living;
     }
 
     // 绘制子弹
     public void paint(Graphics g) {
-        if (!isAlive) {
+        if (!living) {
             this.tankFrame.getBullets().remove(this);
             return;
         }
@@ -74,8 +74,22 @@ public class Bullet {
                 break;
         }
         if (x < 0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) {
-            isAlive = false;
+            living = false;
         }
     }
 
+    // 判断 子弹 和 坦克 的碰撞
+    public void collideWith(Tank tank) {
+        Rectangle bulletR = new Rectangle(x, y, WIDTH, HEIGHT);
+        Rectangle tankR = new Rectangle(tank.getX(), tank.getY(), Tank.WIDTH, Tank.HEIGHT);
+        if (bulletR.intersects(tankR)) { // 两矩形相交
+            this.die();
+            tank.die();
+        }
+    }
+
+    // 死亡
+    private void die() {
+        living = false;
+    }
 }
