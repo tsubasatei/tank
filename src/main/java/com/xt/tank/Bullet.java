@@ -4,22 +4,25 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- * 子弹
+ * 子弹类
  */
 public class Bullet {
-    private int x, y;
-    private Dir dir;
-    private Group group;
-    private TankFrame tankFrame;
+    private int x, y;  // 初始位置
+    private Dir dir;   // 方向
+    private Group group;  // 分组
+    private TankFrame tankFrame;  // tank war 窗口
 
-    private boolean living = true;
+    private boolean living = true;  // 子弹撞到tank就死了
 
+    // 子弹的速度
     public static final int SPEED = PropertyMgr.getInt("bulletSpeed") != null ? PropertyMgr.getInt("bulletSpeed") : 10;
+    // 子弹图片的宽和高
     public static int WIDTH = 30;
     public static int HEIGHT = 30;
-
+    // 子弹图片
     private BufferedImage image;
 
+    // 防注判断子弹是否还存活
     Rectangle rectangle = new Rectangle();
 
     public Bullet(int x, int y, Dir dir, Group group, TankFrame tankFrame) {
@@ -35,12 +38,9 @@ public class Bullet {
         rectangle.height = HEIGHT;
     }
 
-    public boolean living() {
-        return living;
-    }
-
     // 绘制子弹
     public void paint(Graphics g) {
+        // 子弹不存活，从tank窗口移除
         if (!living) {
             this.tankFrame.getBullets().remove(this);
             return;
@@ -82,6 +82,7 @@ public class Bullet {
                 y += SPEED;
                 break;
         }
+        // 若子弹飞出窗口，则不存活了
         if (x < 0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) {
             living = false;
         }
@@ -101,9 +102,9 @@ public class Bullet {
         if (rectangle.intersects(tankR)) { // 两矩形相交
             this.die();
             tank.die();
-            int bX = tank.getX() + Tank.WIDTH / 2 - Explosion.WIDTH / 2;
-            int bY = tank.getY() + Tank.HEIGHT / 2 - Explosion.HEIGHT / 2;
-            this.tankFrame.getExplosions().add(new Explosion(bX, bY, this.tankFrame));
+            int bX = tank.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
+            int bY = tank.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
+            this.tankFrame.getExplosions().add(new Explode(bX, bY, this.tankFrame));
         }
     }
 

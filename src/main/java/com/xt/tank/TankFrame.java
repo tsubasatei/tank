@@ -9,14 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 坦克窗口
+ * 坦克大战窗口
  */
 public class TankFrame extends Frame {
 
-    // 窗口大小
+    // 窗口大小，宽和高
     public static final int GAME_WIDTH = PropertyMgr.getInt("gameWidth") != null ? PropertyMgr.getInt("gameWidth") : 1080;
     public static final int GAME_HEIGHT = PropertyMgr.getInt("gameHeight") != null? PropertyMgr.getInt("gameHeight") : 960;
 
+    // 我方坦克初始位置
     private int x = 200;
     private int y = 400;
 
@@ -27,7 +28,7 @@ public class TankFrame extends Frame {
     // 敌方坦克列表
     private List<Tank> enemyTanks = new ArrayList<>();
     // 爆炸组
-    private List<Explosion> explosions = new ArrayList<>();
+    private List<Explode> explosions = new ArrayList<>();
 
 
     public TankFrame() throws HeadlessException {
@@ -59,7 +60,7 @@ public class TankFrame extends Frame {
         return enemyTanks;
     }
 
-    public List<Explosion> getExplosions() {
+    public List<Explode> getExplosions() {
         return explosions;
     }
 
@@ -95,26 +96,6 @@ public class TankFrame extends Frame {
                 bullets.get(i).collideWith(enemyTanks.get(j));
             }
         }
-
-
-        /* // 可以用
-        Iterator<Bullet> iterator = bullets.iterator();
-        while (iterator.hasNext()) {
-            Bullet bullet = iterator.next();
-            if (!bullet.isAlive()) {
-                iterator.remove();
-            } else {
-                bullet.paint(g);
-            }
-        }*/
-
-
-        /*
-        // 有问题java.util.ConcurrentModificationException
-        for (Bullet bullet : bullets) {
-            bullet.paint(g);
-        }*/
-
     }
 
     /**
@@ -142,6 +123,7 @@ public class TankFrame extends Frame {
 
     // 键盘事件监听器
     class MyKeyListener implements KeyListener {
+        // 方向键是否被按下
         private boolean bL = false;
         private boolean bR = false;
         private boolean bU = false;
@@ -172,6 +154,7 @@ public class TankFrame extends Frame {
                 default:
                     break;
             }
+            // 控制tank方向
             setMainTankDir();
         }
 
@@ -192,15 +175,17 @@ public class TankFrame extends Frame {
                 case KeyEvent.VK_DOWN:
                     bD = false;
                     break;
-                case KeyEvent.VK_CONTROL:  // ctrl 键 发射子弹
+                case KeyEvent.VK_CONTROL:  // ctrl 键弹起 发射子弹
                     tank.fire();
+                    break;
                 default:
                     break;
             }
+            // 设置坦克方向
             setMainTankDir();
         }
 
-        // 设置tank移动方向
+        // 根据方向键，设置tank移动方向
         private void setMainTankDir() {
             if (!bL && !bR && !bU && !bD) tank.setMoving(false);
             else {

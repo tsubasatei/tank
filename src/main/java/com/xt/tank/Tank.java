@@ -7,26 +7,31 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 /**
- * 坦克
+ * 坦克类
  */
 @AllArgsConstructor
 public class Tank {
     private int x, y; // 初始位置
     private Dir dir; // 初始方向
     private Group group; // 分组
-    private TankFrame tankFrame;
+    private TankFrame tankFrame; // 坦克窗口
 
+    // 坦克的移动速度
     public static final int SPEED = PropertyMgr.getInt("tankSpeed") != null ? PropertyMgr.getInt("tankSpeed") : 5;
+    // 坦克图片
     private BufferedImage image;
-
-    public static int WIDTH = 50;
-    public static int HEIGHT = 50;
-
+    // 坦克图片的宽
+    public static int WIDTH = ResourceMgr.goodTankU.getWidth();
+    // 坦克图片的高
+    public static int HEIGHT = ResourceMgr.goodTankU.getHeight();
+    // 是否在移动
     private boolean isMoving = true;
+    // 敌方坦克是否还活着
     private boolean living = true;
 
     private Random random = new Random();
 
+    // 用于判断乙方是否碰到子弹
     Rectangle rectangle = new Rectangle();
 
     public Tank(int x, int y, Dir dir, Group group, TankFrame tankFrame) {
@@ -64,7 +69,9 @@ public class Tank {
 
     // 绘制tank
     public void paint(Graphics g) {
-        if (!living) this.tankFrame.getEnemyTanks().remove(this);
+        //
+        if (this.group == Group.BAD && !living) this.tankFrame.getEnemyTanks().remove(this);
+
         switch (dir) {
             case LEFT:
                 image = group == Group.GOOD ? ResourceMgr.goodTankL : ResourceMgr.badTankL;
@@ -86,7 +93,7 @@ public class Tank {
         move();
     }
 
-    // 移动位置，改变 x、y
+    // 移动tank位置，改变 x、y
     private void move() {
         if (!isMoving) return;
 
@@ -105,18 +112,22 @@ public class Tank {
                 break;
         }
 
+        // 敌方tank 随机发射子弹
         if (this.group == Group.BAD && random.nextInt(100) > 95) this.fire();
+        // 敌方tank 随机移动方向
         if (this.group == Group.BAD && random.nextInt(100) > 95) randomDir();
 
         // 边界检测
         boundCheck();
 
+        // 更新 rectangle
         rectangle.x = x;
         rectangle.y = y;
         rectangle.width = WIDTH;
         rectangle.height = HEIGHT;
     }
 
+    // 边界检测，不让tank移出tank窗口
     private void boundCheck() {
         if (this.x < 2) x = 2;
         if (this.y < 28) y = 28;
@@ -124,7 +135,7 @@ public class Tank {
         if (this.y > TankFrame.GAME_HEIGHT - Tank.HEIGHT -2 ) y = TankFrame.GAME_HEIGHT - Tank.HEIGHT -2;
     }
 
-    // 随即方向
+    // 随机方向移动
     private void randomDir() {
         this.dir = Dir.values()[random.nextInt(4)];
     }
@@ -136,6 +147,7 @@ public class Tank {
         tankFrame.getBullets().add(new Bullet(bX, bY, this.dir, this.group, this.tankFrame));
     }
 
+    // tank 被子弹打死
     public void die() {
         living = false;
     }

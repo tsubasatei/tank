@@ -16,12 +16,14 @@ public class PropertyMgr {
         }
     }
 
+    // 获取配置文件中的相关信息，并转成整型
     public static Integer getInt(String key) {
         String property = properties.getProperty(key);
         if (property == null) return null;
         return Integer.parseInt(property);
     }
 
+    // 获取配置文件相关信息
     public static String getString(String key) {
         return properties.getProperty(key);
     }

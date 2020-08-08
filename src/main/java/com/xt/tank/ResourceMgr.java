@@ -3,16 +3,19 @@ package com.xt.tank;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * 图片资源管理
  * 提前加载进内存
  */
 public class ResourceMgr {
+    // 四个方向的好坦克图片
     public static BufferedImage goodTankL, goodTankR, goodTankU, goodTankD;
+    // 四个方向的坏坦克图片
     public static BufferedImage badTankL, badTankR, badTankU, badTankD;
+    // 四个方向的子弹图片
     public static BufferedImage bulletL, bulletR, bulletU, bulletD;
+    // 16个爆炸图片
     public static BufferedImage[] explosions = new BufferedImage[16];
     static {
         try {
@@ -32,7 +35,6 @@ public class ResourceMgr {
             bulletR = ImageUtil.rotateImage(bulletU, 90);
 
             for (int i = 0; i < 16; i++) {
-                InputStream is;
                 explosions[i] = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/e" + (i+1) + ".gif"));
             }
         } catch (IOException e) {
